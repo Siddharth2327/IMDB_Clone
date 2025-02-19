@@ -25,7 +25,7 @@ function Watchlist() {
           <tbody>
             <tr className='border-b-2'>
               <td className="px-6 py-4 flex items-center space-x-4">Poster
-                <div>vidamuyarchi</div>
+                <div>Good bad ugly</div>
               </td>
               
               <td className="px-6 py-4 text-center">8.2</td>
