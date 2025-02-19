@@ -1,0 +1,11 @@
+before : https://api.themoviedb.org/3/trending/movie/day?language=en-US
+
+after : https://api.themoviedb.org/3/trending/movie/day?api_key=54214450cfd78a5c89247ee674fb2b22&language=en-US
+
+/*stored here and used for future purpose
+/* ? => querry string
+/* we have to add the api key after the querry string (?) type api_key=*-- your api key--*
+/* add and & symbol after the key to sperate from language
+
+
+we should add page numbers to the TMDB url to achieve pagination so adding page=${page} at the end of the url
