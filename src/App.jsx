@@ -7,8 +7,26 @@ import Watchlist from './components/Watchlist'
 import Movies from './components/Movies'
 import MovieRecommendation from './components/MovieRecommendation'
 import {BrowserRouter,Routes,Route} from 'react-router-dom' 
+import { useState, useEffect } from 'react'
 function App() {
-  
+   const [watchlist, setWatchlist] = useState([])
+
+   const handleAddToWatchlist = (movieobj)=>{
+    let updatedWatchlist = [...watchlist, movieobj] // we use SPREAD OPERATOR(...) to update the watchlist without changing the original state
+    setWatchlist(updatedWatchlist) 
+    console.log(updatedWatchlist)
+
+    localStorage.setItem('movies', JSON.stringify(updatedWatchlist))
+   }
+
+
+
+useEffect(()=>{
+  let moviesFromLS = localStorage.getItem('movies')
+  if(moviesFromLS) setWatchlist(JSON.parse(moviesFromLS))
+},[])  
+
+
 
   return (
     <>
@@ -22,11 +40,12 @@ function App() {
             element={
               <>
                 <Banner/>
-                <Movies/>
+                <Movies addToWatchlist={handleAddToWatchlist} Watchlist={watchlist}/>
               </>
             }
           />
-          <Route path='/watchlist' element={<Watchlist/>}/>
+          <Route path='/watchlist' element={<Watchlist watchlist = {watchlist} />}/> 
+          
           <Route path='/recommend' element={<MovieRecommendation/>}/>
       </Routes>
       </div> 
