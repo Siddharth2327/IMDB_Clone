@@ -1,18 +1,38 @@
 import React from 'react'
+import { useState } from 'react'
+
+
 
 function Watchlist({watchlist}) {
+
+  const [search, setSearch] = useState('')
+
+  function searchMovie(e){
+    setSearch(e.target.value)
+    console.log(search)
+  }
+
+
+
   return (
     <>
-      <div>
+      <div className='w-full flex justify-center items-center my-8 '>
         {/*genere Filters*/}
+
+
         {/*Search bar*/}
+        <div >
+          <input type="text" placeholder='Search Movies' onChange={searchMovie} value={search} className='h-[3rem] w-[25rem] p-2 bg-gray-200 outline-none border border-gray-300 text-size-2 text-[1.2rem]'/>
+        </div>
+
+
       </div>
 
       {/*table*/}
       <div className="w-full m-8 overflow-x-auto">
         <table className="w-full border-collapse rounded-lg overflow-hidden shadow-lg">
 
-          <thead className='bg-gray-200 border border-gray-200'>
+          <thead className='bg-gray-200 border border-gray-200 text-[1.4rem]'>
             <tr>
               <th className="text-red-800 px-6 py-4 text-center">Name</th>
               <th className="text-red-800 px-6 py-4 text-center">Ratings</th>
@@ -22,12 +42,15 @@ function Watchlist({watchlist}) {
             </tr>
           </thead>
 
-          <tbody>
-            {watchlist.map((movieobj) => (
+          <tbody className='text-[1.2rem]'>
+               {/* filtering the watchlist based on the search and then printing the data in the table */}
+            {watchlist.filter((movieobj)=>{
+              return movieobj.title.toLowerCase().includes(search.toLowerCase())
+            }).map((movieobj) => (
               <tr className='border-b-2'>
               
               <td className="px-6 py-4 flex items-center space-x-4">
-                <img className='h-[6rem] w[10rem]' src={`https://image.tmdb.org/t/p/original${movieobj.poster_path}`} alt="Movie" />
+                <img className='h-[7rem] w[11rem]' src={`https://image.tmdb.org/t/p/original${movieobj.poster_path}`} alt="Movie" />
                 <div>{movieobj.title}</div>
               </td>
               
@@ -37,6 +60,7 @@ function Watchlist({watchlist}) {
               <td className="px-6 py-4 text-center text-red-500 hover:text-red-900 cursor-pointer">Remove</td>
             </tr>
             ))}
+            
             
           </tbody>
 
