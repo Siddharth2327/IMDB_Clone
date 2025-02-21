@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import genrearr from '../utilities/genre.js'
 // we are only using the genreids object from the genre.js file 
 
-function Watchlist({watchlist}) {
+function Watchlist({watchlist, setWatchlist}) {
   const [search, setSearch] = useState('')
   const [genreList, setGenreList] = useState([])
   const [currgenre, setCurrGenre] = useState('All Genre')
@@ -30,6 +30,21 @@ function Watchlist({watchlist}) {
 // NOTE: in map function when we use {} we need to use return keyword to return the value
 // if we use () we dont need to use return keyword so that there should be the exact thing that should we return there should not be any logic 
 // for eg: see map function usage in use Effect and genre filters
+
+
+  
+  const handleRemove = (movieId)=>{
+    // console.log("Remove button clicked")
+    const updatedWatchList = watchlist.filter((movies) => movies.id !== movieId )
+    setWatchlist(updatedWatchList)
+    localStorage.setItem('movies', JSON.stringify(updatedWatchList))
+  }
+//   onClick={handleRemove(movieobj.id)} → Executes immediately during render.
+// onClick={() => handleRemove(movieobj.id)} → Passes a function reference, executing only on click.
+// so we use the second method to pass the function reference to the onClick event
+
+
+
   return (
     <>
     
@@ -105,7 +120,9 @@ This results in the displayed movies being updated according to the current filt
               <td className="px-6 py-4 text-center">{movieobj.popularity}</td>
               <td className="px-6 py-4 text-center">{genrearr[movieobj.genre_ids[0]]}</td>
               {/* mostly 1st genre in the genre array is preffered */}
-              <td className="px-6 py-4 text-center text-red-500  "><span className='cursor-pointer hover:text-red-900'>Remove</span></td>
+              <td className="px-6 py-4 text-center text-red-500  ">
+                <span onClick={()=>handleRemove(movieobj.id)} className='cursor-pointer hover:text-red-900'>Remove</span>
+              </td>
              </tr>
             ))}
             

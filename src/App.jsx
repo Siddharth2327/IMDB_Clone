@@ -19,6 +19,9 @@ function App() {
     localStorage.setItem('movies', JSON.stringify(updatedWatchlist))
    }
 
+//   onClick={handleAddToWatchlist(movieobj.id)} → Executes immediately during render.
+// onClick={() => handleRemove(movieobj.id)} → Passes a function reference, executing only on click.
+// so we use the second method to pass the function reference to the onClick event
 
 
 useEffect(()=>{
@@ -44,7 +47,7 @@ useEffect(()=>{
               </>
             }
           />
-          <Route path='/watchlist' element={<Watchlist watchlist = {watchlist} />}/> 
+          <Route path='/watchlist' element={<Watchlist watchlist = {watchlist} setWatchlist={setWatchlist} />}/> 
           
           <Route path='/recommend' element={<MovieRecommendation/>}/>
       </Routes>

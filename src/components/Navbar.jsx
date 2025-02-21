@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom'
 import Logo from '../movieLogo.png'
 function Navbar() {
   return (
-    <div className='flex space-x-8 pl-3 py-4 items-center bg-gray-200 '>
-      <img className="w-[70px]"src={Logo} alt='Logo'/>
-      <Link to="/" className="text-3xl font-bold text-red-800 hover:text-red-400">Movies</Link> 
+    <div className='flex space-x-8 pl-3 py-4 items-center bg-gray-200 shadow-md sticky top-0 z-50'>
+      <img className="w-[70px]" src={Logo} alt='Logo' />
+      <Link to="/" className="text-3xl font-bold text-red-800 hover:text-red-400">Movies</Link>
       <Link to="/watchlist" className="text-3xl font-bold text-red-800 hover:text-red-400">Watchlist</Link>
       <Link to="/recommend" className="text-3xl font-bold text-red-800 hover:text-red-400">Movie Recommendations</Link>
     </div>
