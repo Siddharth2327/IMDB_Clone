@@ -7,15 +7,16 @@ function Watchlist({watchlist, setWatchlist}) {
   const [search, setSearch] = useState('')
   const [genreList, setGenreList] = useState([])
   const [currgenre, setCurrGenre] = useState('All Genre')
-  // function for searching
   
+  
+  // function for searching
   function searchMovie(e){
     setSearch(e.target.value)
     console.log(search)
   }
 
-  // function to get genres and create filters
   
+  // function to get genres and create filters
   useEffect(()=>{
     let temp = watchlist.map((movie)=>{
       return genrearr[movie.genre_ids[0]]
@@ -26,13 +27,41 @@ function Watchlist({watchlist, setWatchlist}) {
   // console.log(temp)
     setGenreList(["All Genre",...temp]) // make the temp set as array and spread out all the values
   },[watchlist])
+
+
   
 // NOTE: in map function when we use {} we need to use return keyword to return the value
 // if we use () we dont need to use return keyword so that there should be the exact thing that should we return there should not be any logic 
 // for eg: see map function usage in use Effect and genre filters
 
 
-  
+
+// SORTING THE ARRAY BASED ON RATINGS
+  const sortAsc = () =>{
+    const sortedWatchList = [...watchlist].sort((a, b) => b.vote_average - a.vote_average) 
+    // here spread operator ismused to make a shallow copy of the watchlist such that original watchlist is not disturbed
+    //If the result is negative (a < b), a comes before b.
+    // If positive (a > b), b comes before a.
+    // If zero, the order remains unchanged.
+    setWatchlist(sortedWatchList)
+    localStorage.setItem('movies', JSON.stringify(sortedWatchList))
+  }
+
+  const sortDesc = () =>{
+    const sortedWatchList = [...watchlist].sort((a,b)=> a.vote_average - b.vote_average)
+    setWatchlist(sortedWatchList)
+    localStorage.setItem('movies', JSON.stringify(sortedWatchList))
+  }
+
+
+
+
+
+
+
+
+
+  // function referal for removing the movies from the watchlist
   const handleRemove = (movieId)=>{
     // console.log("Remove button clicked")
     const updatedWatchList = watchlist.filter((movies) => movies.id !== movieId )
@@ -89,7 +118,11 @@ function Watchlist({watchlist, setWatchlist}) {
           <thead className='bg-gray-200 border border-gray-200 text-[1.4rem]'>
             <tr>
               <th className="text-red-800 px-6 py-4 text-center">Name</th>
-              <th className="text-red-800 px-6 py-4 text-center">Ratings</th>
+              <th className="text-red-800 px-6 py-4 text-center">
+                <span onClick={()=> sortAsc()} className='hover: cursor-pointer'>&#x2191;</span>
+                Ratings
+                <span onClick={()=> sortDesc()} className='hover: cursor-pointer'>&#x2193;</span>
+                </th>
               <th className="text-red-800 px-6 py-4 text-center">Popularity</th>
               <th className="text-red-800 px-6 py-4 text-center">Genere</th>
               <th className="text-red-800 px-6 py-4 text-center">Remove Movies</th>
