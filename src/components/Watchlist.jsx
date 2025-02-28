@@ -85,7 +85,7 @@ function Watchlist({watchlist, setWatchlist}) {
           <button
            key={genre}
             onClick={()=> setCurrGenre(genre)}
-            className={`px-4 py-2 text-sm font-semibold rounded-md transition-all duration-300 ${
+            className={`px-4 py-2 text-sm    rounded-md transition-all duration-300 ${
               currgenre === genre ? "bg-red-400    text-white" : "bg-gray-300 hover:bg-gray-400"
             }`}
             > 
@@ -115,9 +115,9 @@ function Watchlist({watchlist, setWatchlist}) {
       <div className="w-full m-8 overflow-x-auto">
         <table className="w-full border-collapse rounded-lg overflow-hidden shadow-lg">
 
-          <thead className='bg-gray-200 border border-gray-200 text-[1.4rem]'>
+          <thead className='bg-gray-200 border border-gray-200 text-[1.4rem] font-serif'>
             <tr>
-              <th className="text-red-800 px-6 py-4 text-center">Name</th>
+              <th className="text-red-800 px-6 py-4 text-center ">Name</th>
               <th className="text-red-800 px-6 py-4 text-center">
                 <span onClick={()=> sortAsc()} className='hover: cursor-pointer'>&#x2191;</span>
                 Ratings
@@ -125,7 +125,7 @@ function Watchlist({watchlist, setWatchlist}) {
                 </th>
               <th className="text-red-800 px-6 py-4 text-center">Popularity</th>
               <th className="text-red-800 px-6 py-4 text-center">Genere</th>
-              <th className="text-red-800 px-6 py-4 text-center">Remove Movies</th>
+              <th className="text-red-800 px-6 py-4 text-center"></th>
             </tr>
           </thead>
 

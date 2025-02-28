@@ -4,7 +4,7 @@ import Pagination from './Pagination'
 import axios from 'axios'
 import { useState } from 'react'
 
-function Movies({addToWatchlist, Watchlist}) {
+function Movies({addToWatchlist, Watchlist, setWatchlist}) {
   // creating state for movie data using 
   
   const [movies, setMovies] = useState([])
@@ -39,7 +39,7 @@ function Movies({addToWatchlist, Watchlist}) {
       <div className='flex flex-wrap justify-evenly'>
       {
         movies.map((moviesObj)=>(
-          <Moviecard movieObject={moviesObj} finalAddToWatchlist={addToWatchlist} Watchlist={Watchlist}/>
+          <Moviecard movieObject={moviesObj} finalAddToWatchlist={addToWatchlist} Watchlist={Watchlist} setWatchlist={setWatchlist}/>
         ))
       }
     </div>

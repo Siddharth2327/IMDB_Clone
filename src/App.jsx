@@ -43,7 +43,7 @@ useEffect(()=>{
             element={
               <>
                 <Banner/>
-                <Movies addToWatchlist={handleAddToWatchlist} Watchlist={watchlist}/>
+                <Movies addToWatchlist={handleAddToWatchlist} Watchlist={watchlist} setWatchlist={setWatchlist} />
               </>
             }
           />
