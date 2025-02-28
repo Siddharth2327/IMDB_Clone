@@ -8,6 +8,12 @@ import Movies from './components/Movies'
 import MovieRecommendation from './components/MovieRecommendation'
 import {BrowserRouter,Routes,Route} from 'react-router-dom' 
 import { useState, useEffect } from 'react'
+import { MovieContext } from './components/MovieContext'
+
+
+
+
+
 function App() {
    const [watchlist, setWatchlist] = useState([])
 
@@ -33,27 +39,30 @@ useEffect(()=>{
 
   return (
     <>
+    <MovieContext.Provider value={{handleAddToWatchlist, watchlist, setWatchlist}}>
       <BrowserRouter>
-      <Navbar/>
+        <Navbar/>
       
-      <div className='space-y-10  flex flex-wrap justify-space-around'>
-      <Routes>
+       <div className='space-y-10  flex flex-wrap justify-space-around'>
+        <Routes>
           <Route
             path='/' 
             element={
               <>
                 <Banner/>
-                <Movies addToWatchlist={handleAddToWatchlist} Watchlist={watchlist} setWatchlist={setWatchlist} />
+                <Movies  />
               </>
             }
           />
-          <Route path='/watchlist' element={<Watchlist watchlist = {watchlist} setWatchlist={setWatchlist} />}/> 
+          <Route path='/watchlist' element={<Watchlist  />}/> 
           
           <Route path='/recommend' element={<MovieRecommendation/>}/>
-      </Routes>
-      </div> 
+        </Routes>
+        </div> 
       
       </BrowserRouter>
+    </MovieContext.Provider>
+      
     </>
   )
 }

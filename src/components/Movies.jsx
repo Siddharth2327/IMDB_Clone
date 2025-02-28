@@ -1,10 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Moviecard from './Moviecard'
 import Pagination from './Pagination'
 import axios from 'axios'
 import { useState } from 'react'
+import { MovieContext } from './MovieContext'
 
-function Movies({addToWatchlist, Watchlist, setWatchlist}) {
+function Movies() {
+  // iporting Moviecontext
+  // const {handleAddToWatchlist, watchlist, setWatchlist} = useContext(MovieContext)
+
+
+
+
   // creating state for movie data using 
   
   const [movies, setMovies] = useState([])
@@ -39,7 +46,7 @@ function Movies({addToWatchlist, Watchlist, setWatchlist}) {
       <div className='flex flex-wrap justify-evenly'>
       {
         movies.map((moviesObj)=>(
-          <Moviecard movieObject={moviesObj} finalAddToWatchlist={addToWatchlist} Watchlist={Watchlist} setWatchlist={setWatchlist}/>
+          <Moviecard movieObject={moviesObj} />
         ))
       }
     </div>

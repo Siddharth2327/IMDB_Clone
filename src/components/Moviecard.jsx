@@ -1,16 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { MovieContext } from './MovieContext';
 
 
 
 
 
-function Moviecard({ movieObject, finalAddToWatchlist, Watchlist, setWatchlist }) {
+function Moviecard({ movieObject}) {
     
+    // importing MovieContext details
+    const {watchlist, handleAddToWatchlist, setWatchlist} = useContext(MovieContext);
 
     // function to check the watchlist and update the tick or heart emojie
     function doesContains() {
-        for (let i = 0; i < Watchlist.length; i++) {
-            if (Watchlist[i].id === movieObject.id) {
+        for (let i = 0; i < watchlist.length; i++) {
+            if (watchlist[i].id === movieObject.id) {
                 return true;
             }
         }
@@ -19,7 +22,7 @@ function Moviecard({ movieObject, finalAddToWatchlist, Watchlist, setWatchlist }
 
     // function to remove from the wawtchlist while clicking on the tick emojie
     const handleRemoveOnTick = (movieId)=>{
-        let updatedWatchList = Watchlist.filter((movie)=> movie.id!== movieId)
+        let updatedWatchList = watchlist.filter((movie)=> movie.id!== movieId)
         setWatchlist(updatedWatchList)
         localStorage.setItem('movies', JSON.stringify(updatedWatchList))
     }
@@ -44,7 +47,7 @@ function Moviecard({ movieObject, finalAddToWatchlist, Watchlist, setWatchlist }
                         &#10004;
                     </div> 
                               :
-                    <div onClick={()=>finalAddToWatchlist(movieObject)} title="Add to WatchList" 
+                    <div onClick={()=>handleAddToWatchlist(movieObject)} title="Add to WatchList" 
                     className='text-[1.3rem] absolute top-0.8 right-1 flex justify-center items-center p-2 w-[2rem] hover:cursor-pointer'>
                         <span className='absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'></span>
                         &#x2665;&#xfe0f;

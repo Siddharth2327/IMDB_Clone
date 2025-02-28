@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState, useEffect } from 'react'
 import genrearr from '../utilities/genre.js'
+import { MovieContext } from './MovieContext.jsx'
 // we are only using the genreids object from the genre.js file 
 
-function Watchlist({watchlist, setWatchlist}) {
+function Watchlist() {
+
+  // importing movie Context data
+  const {watchlist, setWatchlist} = useContext(MovieContext);
+
+
   const [search, setSearch] = useState('')
   const [genreList, setGenreList] = useState([])
   const [currgenre, setCurrGenre] = useState('All Genre')
