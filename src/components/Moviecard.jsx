@@ -54,7 +54,7 @@ function Moviecard({ movieObject }) {
                 exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
               >
-                <FaCheck className="text-yellow-400 text-[1.5rem]" />
+                <FaCheck className="text-red-500 dark:text-yellow-400 text-[1.5rem]" />
               </motion.div>
             ) : (
               <motion.div
@@ -64,7 +64,7 @@ function Moviecard({ movieObject }) {
                 exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <FaBookmark className="text-gray-400 hover:text-yellow-400 text-[1.5rem]" />
+                <FaBookmark className="text-gray-400 hover:text-red-500 dark:text-yellow-400 text-[1.5rem]" />
               </motion.div>
             )}
           </AnimatePresence>
