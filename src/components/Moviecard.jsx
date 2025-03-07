@@ -43,7 +43,7 @@ function Moviecard({ movieObject }) {
           transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
           onClick={() => doesContains() ? handleRemoveOnTick(movieObject.id) : handleAddToWatchlist(movieObject)}
           title={doesContains() ? "Remove from Watchlist" : "Add to Watchlist"}
-          className="absolute top-2 right-2 cursor-pointer p-2"
+          className="absolute top-1 right-1 cursor-pointer p-2"
         >
           <AnimatePresence mode="wait">
             {doesContains() ? (
@@ -64,7 +64,7 @@ function Moviecard({ movieObject }) {
                 exit={{ opacity: 0, scale: 0.5 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <FaBookmark className="text-gray-400 hover:text-red-500 dark:text-yellow-400 text-[1.5rem]" />
+                <FaBookmark className="text-gray-400 hover:text-red-500 dark:hover:text-yellow-400 dark:text-gray-400  text-[1.5rem]" />
               </motion.div>
             )}
           </AnimatePresence>

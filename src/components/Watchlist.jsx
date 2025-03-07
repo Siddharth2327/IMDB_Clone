@@ -65,7 +65,7 @@ function Watchlist() {
 
         <button 
           onClick={toggleSort} 
-          className="mt-3 md:mt-0 px-4 py-2 bg-red-500 dark:bg-yellow-400 hover:bg-blue-600 text-white dark:text-gray-800 rounded-md transition">
+          className="mt-3 md:mt-0 px-4 py-2 bg-red-500 dark:bg-yellow-400 hover:bg-red-600 text-white dark:text-gray-800 rounded-md transition">
           Sort by Ratings {sortOrder === "desc" ? "⬇️" : "⬆️"}
         </button>
       </div>
