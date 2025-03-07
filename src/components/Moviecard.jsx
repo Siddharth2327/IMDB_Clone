@@ -1,70 +1,115 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import { MovieContext } from './MovieContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaBookmark, FaCheck } from 'react-icons/fa';
 
+function Moviecard({ movieObject }) {
+  const { watchlist, handleAddToWatchlist, setWatchlist } = useContext(MovieContext);
+  
+  // State to trigger animation after refresh
+  const [animate, setAnimate] = useState(false);
 
+  // Run animation effect when component mounts
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
 
+  // Check if the movie is in the watchlist
+  function doesContains() {
+    return watchlist.some(movie => movie.id === movieObject.id);
+  }
 
+  // Remove movie from watchlist
+  const handleRemoveOnTick = (movieId) => {
+    let updatedWatchList = watchlist.filter((movie) => movie.id !== movieId);
+    setWatchlist(updatedWatchList);
+    localStorage.setItem('movies', JSON.stringify(updatedWatchList));
+  };
 
-function Moviecard({ movieObject}) {
-    
-    // importing MovieContext details
-    const {watchlist, handleAddToWatchlist, setWatchlist} = useContext(MovieContext);
+  return (
+    <div className="space-y-1 m-3 hover:scale-105 transition duration-300 ease-in-out transform">
+      
+      {/* Movie Poster */}
+      <div
+        className="w-[180px] h-[36vh] bg-cover ml-3 rounded-lg relative hover:border border-gray-400 shadow-lg"
+        style={{
+          backgroundImage: `url(https://image.tmdb.org/t/p/original${movieObject.poster_path})`
+        }}
+      >
+        {/* Animated Watchlist Icon */}
+        <motion.div
+          initial={{ scale: 0, opacity: 0 }}
+          animate={animate ? { scale: 1.2, opacity: 1 } : {}}
+          transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
+          onClick={() => doesContains() ? handleRemoveOnTick(movieObject.id) : handleAddToWatchlist(movieObject)}
+          title={doesContains() ? "Remove from Watchlist" : "Add to Watchlist"}
+          className="absolute top-2 right-2 cursor-pointer p-2"
+        >
+          <AnimatePresence mode="wait">
+            {doesContains() ? (
+              <motion.div
+                key={`watchlist-${movieObject.id}`}
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1, rotate: 360 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              >
+                <FaCheck className="text-yellow-400 text-[1.5rem]" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={`bookmark-${movieObject.id}`}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <FaBookmark className="text-gray-400 hover:text-yellow-400 text-[1.5rem]" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
 
-    // function to check the watchlist and update the tick or heart emojie
-    function doesContains() {
-        for (let i = 0; i < watchlist.length; i++) {
-            if (watchlist[i].id === movieObject.id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // function to remove from the wawtchlist while clicking on the tick emojie
-    const handleRemoveOnTick = (movieId)=>{
-        let updatedWatchList = watchlist.filter((movie)=> movie.id!== movieId)
-        setWatchlist(updatedWatchList)
-        localStorage.setItem('movies', JSON.stringify(updatedWatchList))
-    }
-
-
-    return (
-        <>
-
-            <div className='space-x-8 space-y-8 m-4 hover:scale-110 transition duration-300 ease-in-out transform '>
-
-                <div className='w-[200px] h-[40vh] bg-cover ml-8 rounded-lg relative hover:border border-gray-400 shadow-lg'
+    {/* Movie Name & Rating - Adjusted Closer to the Card */}
+        <div className="w-[180px] flex justify-center items-center px-2 pt-0 mb-6">
+            <div className="relative w-[70%] overflow-hidden ml-2">
+                <p
+                    className="text-sm font-semibold dark:text-yellow-400 text-red-600 inline-block leading-tight"
                     style={{
-                        backgroundImage: `url(https://image.tmdb.org/t/p/original${movieObject.poster_path})`
-                    }}>
+                        whiteSpace: "nowrap",
+                        display: "inline-block",
+                        animation: movieObject.title.length > 15 ? "marquee 10s linear infinite" : "none",
+                        paddingRight: "10px" // Adjusted padding
+                }}
+            >
+                {movieObject.title}
+            </p>
+            <br />
+            <span className="text-xs text-gray-500 " >{movieObject.release_date?.split("-")[0]}</span> {/* Adjusted padding */}
+        </div>
 
-                    {/*{To add the movies to watchlist when clicked on the heart button and to remove when clicked on tick button we use a ternary operator }*/}
+        {/* Rating */}
+        <div className="text-xs font-medium dark:text-yellow-400 text-red-600">
+          ⭐ {movieObject.vote_average.toFixed(1)}
+        </div>
+      </div>
 
-                    {doesContains(movieObject) ? 
-                    <div onClick={()=>handleRemoveOnTick(movieObject.id)} title="Remove from WatchList" 
-                        className='text-[1.3rem] absolute top-0.8 right-1 flex justify-center items-center p-2 w-[2rem] hover:cursor-pointer '>
-                        <span className='absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'></span>
-                        &#10004;
-                    </div> 
-                              :
-                    <div onClick={()=>handleAddToWatchlist(movieObject)} title="Add to WatchList" 
-                    className='text-[1.3rem] absolute top-0.8 right-1 flex justify-center items-center p-2 w-[2rem] hover:cursor-pointer'>
-                        <span className='absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2'></span>
-                        &#x2665;&#xfe0f;
-                    </div> 
-                    }
+      {/* Marquee Animation */}
+      <style>
+        {`
+          @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+          }
+        `}
+      </style>
 
-
-
-                    <h5 className='text-white font-serif text-center text-xl rounded-lg p-2 bg-gray-900/25 absolute bottom-0 left-0 right-0'>{movieObject.title}</h5>
-                </div>
-
-            </div>
-
-        </>
-    )
+    </div>
+  );
 }
-export default Moviecard
+
+export default Moviecard;
 
 // we use props title and posterUrl to update the movie cards,
 // instead of these getting props seperately we are passing the moviesObj as a prop directly

@@ -1,0 +1,4 @@
+body {
+  @apply transition-colors duration-500 bg-gray-100 text-gray-800 
+         dark:bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:text-white;
+}

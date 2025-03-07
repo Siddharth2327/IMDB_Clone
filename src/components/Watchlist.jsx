@@ -1,178 +1,119 @@
-import React, { useContext } from 'react'
-import { useState, useEffect } from 'react'
-import genrearr from '../utilities/genre.js'
-import { MovieContext } from './MovieContext.jsx'
-// we are only using the genreids object from the genre.js file 
+import React, { useContext, useState, useEffect } from "react";
+import genrearr from "../utilities/genre.js";
+import { MovieContext } from "./MovieContext.jsx";
 
 function Watchlist() {
+  const { watchlist, setWatchlist } = useContext(MovieContext);
 
-  // importing movie Context data
-  const {watchlist, setWatchlist} = useContext(MovieContext);
+  const [search, setSearch] = useState("");
+  const [genreList, setGenreList] = useState([]);
+  const [currgenre, setCurrGenre] = useState("All Genre");
 
-
-  const [search, setSearch] = useState('')
-  const [genreList, setGenreList] = useState([])
-  const [currgenre, setCurrGenre] = useState('All Genre')
-  
-  
-  // function for searching
-  function searchMovie(e){
-    setSearch(e.target.value)
-    console.log(search)
-  }
-
-  
-  // function to get genres and create filters
-  useEffect(()=>{
-    let temp = watchlist.map((movie)=>{
-      return genrearr[movie.genre_ids[0]]
-    })
-    // to remove the repetitve genres in the temp array we use hash set method
-   // in js we have inbuilt method for set
+  useEffect(() => {
+    let temp = watchlist.map((movie) => genrearr[movie.genre_ids[0]]);
     temp = new Set(temp);
-  // console.log(temp)
-    setGenreList(["All Genre",...temp]) // make the temp set as array and spread out all the values
-  },[watchlist])
+    setGenreList(["All Genre", ...temp]);
+  }, [watchlist]);
 
+  const sortAsc = () => {
+    const sortedWatchList = [...watchlist].sort((a, b) => b.vote_average - a.vote_average);
+    setWatchlist(sortedWatchList);
+    localStorage.setItem("movies", JSON.stringify(sortedWatchList));
+  };
 
-  
-// NOTE: in map function when we use {} we need to use return keyword to return the value
-// if we use () we dont need to use return keyword so that there should be the exact thing that should we return there should not be any logic 
-// for eg: see map function usage in use Effect and genre filters
+  const sortDesc = () => {
+    const sortedWatchList = [...watchlist].sort((a, b) => a.vote_average - b.vote_average);
+    setWatchlist(sortedWatchList);
+    localStorage.setItem("movies", JSON.stringify(sortedWatchList));
+  };
 
-
-
-// SORTING THE ARRAY BASED ON RATINGS
-  const sortAsc = () =>{
-    const sortedWatchList = [...watchlist].sort((a, b) => b.vote_average - a.vote_average) 
-    // here spread operator ismused to make a shallow copy of the watchlist such that original watchlist is not disturbed
-    //If the result is negative (a < b), a comes before b.
-    // If positive (a > b), b comes before a.
-    // If zero, the order remains unchanged.
-    setWatchlist(sortedWatchList)
-    localStorage.setItem('movies', JSON.stringify(sortedWatchList))
-  }
-
-  const sortDesc = () =>{
-    const sortedWatchList = [...watchlist].sort((a,b)=> a.vote_average - b.vote_average)
-    setWatchlist(sortedWatchList)
-    localStorage.setItem('movies', JSON.stringify(sortedWatchList))
-  }
-
-
-
-
-
-
-
-
-
-  // function referal for removing the movies from the watchlist
-  const handleRemove = (movieId)=>{
-    // console.log("Remove button clicked")
-    const updatedWatchList = watchlist.filter((movies) => movies.id !== movieId )
-    setWatchlist(updatedWatchList)
-    localStorage.setItem('movies', JSON.stringify(updatedWatchList))
-  }
-//   onClick={handleRemove(movieobj.id)} → Executes immediately during render.
-// onClick={() => handleRemove(movieobj.id)} → Passes a function reference, executing only on click.
-// so we use the second method to pass the function reference to the onClick event
-
-
+  const handleRemove = (movieId) => {
+    const updatedWatchList = watchlist.filter((movies) => movies.id !== movieId);
+    setWatchlist(updatedWatchList);
+    localStorage.setItem("movies", JSON.stringify(updatedWatchList));
+  };
 
   return (
-    <>
-    
-      <div className='container mx-auto p-6'>
-        {/*GENRE FILTERS*/}
-         {/* This genre shows only the genre of the movies added to the watchlist */}
+    <div className="container mx-auto bg-gray-100 dark:bg-gray-900 transition-colors duration-300 min-h-screen">
+      <div className="p-6 pb-2">
+        {/* Genre Filters */}
         <div className="flex flex-wrap justify-center gap-7 my-4">
-          {genreList.map((genre)=>(
-          <button
-           key={genre}
-            onClick={()=> setCurrGenre(genre)}
-            className={`px-4 py-2 text-sm    rounded-md transition-all duration-300 ${
-              currgenre === genre ? "bg-red-400    text-white" : "bg-gray-300 hover:bg-gray-400"
-            }`}
-            > 
-            {genre}
+          {genreList.map((genre) => (
+            <button
+              key={genre}
+              onClick={() => setCurrGenre(genre)}
+              className={`px-4 py-2 text-sm rounded-md transition-all duration-300 ${
+                currgenre === genre
+                  ? "bg-red-500 text-white dark:bg-yellow-400 dark:text-gray-900"
+                  : "bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-900 dark:text-white"
+              }`}
+            >
+              {genre}
             </button>
           ))}
         </div>
-        
 
-
-        {/*SEARCH BAR*/}
-        <div className='flex justify-center my-6' >
-          
+        {/* Search Bar */}
+        <div className="flex justify-center mb-4">
           <input
-           type="text" 
-           placeholder='Search Movies'
-            onChange={searchMovie} 
-            value={search} 
-            className='h-[3rem] w-[25rem] p-2 bg-gray-200 outline-none border border-gray-300 text-size-2 text-[1.2rem]'/>
+            type="text"
+            placeholder="Search Movies"
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            className="h-[3rem] w-[25rem] p-2 bg-gray-200 dark:bg-gray-800 outline-none border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-[1.2rem] transition-colors duration-300"
+          />
         </div>
-
       </div>
 
-      
-
-      {/*MOVIE TABLE*/}
-      <div className="w-full m-8 overflow-x-auto">
+      {/* Movie Table */}
+      <div className="w-full overflow-x-auto">
         <table className="w-full border-collapse rounded-lg overflow-hidden shadow-lg">
-
-          <thead className='bg-gray-200 border border-gray-200 text-[1.4rem] font-serif'>
+          <thead className="bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-[1.4rem] font-serif transition-colors duration-300">
             <tr>
-              <th className="text-red-800 px-6 py-4 text-center ">Name</th>
-              <th className="text-red-800 px-6 py-4 text-center">
-                <span onClick={()=> sortAsc()} className='hover: cursor-pointer'>&#x2191;</span>
+              <th className="text-red-800 dark:text-yellow-400 px-6 py-4 text-center">Name</th>
+              <th className="text-red-800 dark:text-yellow-400 px-6 py-4 text-center">
+                <span onClick={() => sortAsc()} className="cursor-pointer">
+                  &#x2191;
+                </span>
                 Ratings
-                <span onClick={()=> sortDesc()} className='hover: cursor-pointer'>&#x2193;</span>
-                </th>
-              <th className="text-red-800 px-6 py-4 text-center">Popularity</th>
-              <th className="text-red-800 px-6 py-4 text-center">Genere</th>
-              <th className="text-red-800 px-6 py-4 text-center"></th>
+                <span onClick={() => sortDesc()} className="cursor-pointer">
+                  &#x2193;
+                </span>
+              </th>
+              <th className="text-red-800 dark:text-yellow-400 px-6 py-4 text-center">Popularity</th>
+              <th className="text-red-800 dark:text-yellow-400 px-6 py-4 text-center">Genre</th>
+              <th className="px-6 py-4"></th>
             </tr>
           </thead>
 
-          <tbody className='text-[1.2rem]'>
-
-            
-               {/* Each time currgenre (state) or search(state) changes, the component re-renders, and the filtering logic is applied again.
-This results in the displayed movies being updated according to the current filters. */}
-
-            {watchlist.filter((movieobj)=>{
-              if(currgenre==="All Genre" || currgenre===genrearr[movieobj.genre_ids[0]]) return movieobj
-            }) // for genre based filtering
-            .filter((movieobj)=>{
-              return movieobj.title.toLowerCase().includes(search.toLowerCase())
-            }) // for search based filtering
-            .map((movieobj) => ( 
-             <tr className='border-b-2'>
-              
-              <td className="px-6 py-4 flex items-center space-x-4">
-                <img className='h-[7rem] w[11rem]' src={`https://image.tmdb.org/t/p/original${movieobj.poster_path}`} alt="Movie" />
-                <div>{movieobj.title}</div>
-              </td>
-              
-              <td className="px-6 py-4 text-center">{movieobj.vote_average}</td>
-              <td className="px-6 py-4 text-center">{movieobj.popularity}</td>
-              <td className="px-6 py-4 text-center">{genrearr[movieobj.genre_ids[0]]}</td>
-              {/* mostly 1st genre in the genre array is preffered */}
-              <td className="px-6 py-4 text-center text-red-500  ">
-                <span onClick={()=>handleRemove(movieobj.id)} className='cursor-pointer hover:text-red-900'>Remove</span>
-              </td>
-             </tr>
-            ))}
-            
-            
+          <tbody className="text-[1.2rem]">
+            {watchlist
+              .filter((movieobj) => currgenre === "All Genre" || currgenre === genrearr[movieobj.genre_ids[0]])
+              .filter((movieobj) => movieobj.title.toLowerCase().includes(search.toLowerCase()))
+              .map((movieobj) => (
+                <tr key={movieobj.id} className="border-b-2 border-gray-300 dark:border-gray-700 transition-colors duration-300">
+                  <td className="px-6 py-4 flex items-center space-x-4 text-gray-900 dark:text-white">
+                    <img className="h-[11rem] w-[8rem]" src={`https://image.tmdb.org/t/p/original${movieobj.poster_path}`} alt="Movie" />
+                    <div>{movieobj.title}</div>
+                  </td>
+                  <td className="px-6 py-4 text-center text-gray-900 dark:text-white">{movieobj.vote_average}</td>
+                  <td className="px-6 py-4 text-center text-gray-900 dark:text-white">{movieobj.popularity}</td>
+                  <td className="px-6 py-4 text-center text-gray-900 dark:text-white">{genrearr[movieobj.genre_ids[0]]}</td>
+                  <td className="px-6 py-4 text-center">
+                    <span
+                      onClick={() => handleRemove(movieobj.id)}
+                      className="cursor-pointer text-red-500 dark:text-yellow-400 hover:text-red-800 dark:hover:text-yellow-600 transition-all duration-300"
+                    >
+                      Remove
+                    </span>
+                  </td>
+                </tr>
+              ))}
           </tbody>
-
         </table>
       </div>
-
-    </>
-  )
+    </div>
+  );
 }
 
-export default Watchlist
+export default Watchlist;
