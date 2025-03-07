@@ -4,10 +4,10 @@ import { MovieContext } from "./MovieContext.jsx";
 
 function Watchlist() {
   const { watchlist, setWatchlist } = useContext(MovieContext);
-
   const [search, setSearch] = useState("");
   const [genreList, setGenreList] = useState([]);
   const [currgenre, setCurrGenre] = useState("All Genre");
+  const [removing, setRemoving] = useState({}); // Track removing movies
 
   useEffect(() => {
     let temp = watchlist.map((movie) => genrearr[movie.genre_ids[0]]);
@@ -28,9 +28,12 @@ function Watchlist() {
   };
 
   const handleRemove = (movieId) => {
-    const updatedWatchList = watchlist.filter((movies) => movies.id !== movieId);
-    setWatchlist(updatedWatchList);
-    localStorage.setItem("movies", JSON.stringify(updatedWatchList));
+    setRemoving((prev) => ({ ...prev, [movieId]: true })); // Trigger fade-out animation
+    setTimeout(() => {
+      const updatedWatchList = watchlist.filter((movies) => movies.id !== movieId);
+      setWatchlist(updatedWatchList);
+      localStorage.setItem("movies", JSON.stringify(updatedWatchList));
+    }, 500); // Remove after animation ends
   };
 
   return (
@@ -91,7 +94,12 @@ function Watchlist() {
               .filter((movieobj) => currgenre === "All Genre" || currgenre === genrearr[movieobj.genre_ids[0]])
               .filter((movieobj) => movieobj.title.toLowerCase().includes(search.toLowerCase()))
               .map((movieobj) => (
-                <tr key={movieobj.id} className="border-b-2 border-gray-300 dark:border-gray-700 transition-colors duration-300">
+                <tr
+                  key={movieobj.id}
+                  className={`border-b-2 border-gray-300 dark:border-gray-700 transition-all duration-500 ${
+                    removing[movieobj.id] ? "opacity-0 translate-x-10" : "opacity-100"
+                  }`}
+                >
                   <td className="px-6 py-4 flex items-center space-x-4 text-gray-900 dark:text-white">
                     <img className="h-[11rem] w-[8rem]" src={`https://image.tmdb.org/t/p/original${movieobj.poster_path}`} alt="Movie" />
                     <div>{movieobj.title}</div>

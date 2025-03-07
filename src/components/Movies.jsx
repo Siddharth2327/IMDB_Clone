@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { MovieContext } from './MovieContext'
 
 function Movies() {
-  // iporting Moviecontext
+  // importing Moviecontext
   // const {handleAddToWatchlist, watchlist, setWatchlist} = useContext(MovieContext)
 
 
