@@ -14,6 +14,7 @@ function Movies() {
 
   // creating state for movie data using 
   
+  
   const [movies, setMovies] = useState([])
   // console.log(movies) // for refernce purpose 
   // always keep the consolelog out of the useEffect
@@ -30,9 +31,11 @@ function Movies() {
 
 
   useEffect(()=>{
+    
     axios.get(`https://api.themoviedb.org/3/trending/movie/day?api_key=54214450cfd78a5c89247ee674fb2b22&language=en-US&page=${page}`)
     .then((response)=>{
       setMovies(response.data.results)
+      
     })
     .catch((err)=>{
       console.error("Cannot fetch API data => "+ err)
@@ -42,22 +45,21 @@ function Movies() {
 
   return (
     <div>
+      
+        <>
+          <div className='flex flex-wrap justify-evenly'>
+            {movies.map((moviesObj) => (
+              <Moviecard key={moviesObj.id} movieObject={moviesObj} />
+            ))}
+          </div>
 
-      <div className='flex flex-wrap justify-evenly'>
-      {
-        movies.map((moviesObj)=>(
-          <Moviecard movieObject={moviesObj} />
-        ))
-      }
+          <div>
+            <Pagination handleNext={handleNext} handlePrevious={handlePrev} page={page} />
+          </div>
+        </>
+      
     </div>
-
-    <div>
-      <Pagination handleNext={handleNext} handlePrevious={handlePrev} page={page}/>
-    </div>
-    
-    </div>
-    
-  )
+  );
 }
 
 export default Movies

@@ -2,14 +2,13 @@
 import './App.css'
 import Navbar from './components/Navbar'
 import Banner from './components/Banner'
-import Moviecard from './components/Moviecard'
-import Watchlist from './components/Watchlist'
 import Movies from './components/Movies'
-import MovieRecommendation from './components/MovieRecommendation'
 import {BrowserRouter,Routes,Route} from 'react-router-dom' 
-import { useState, useEffect } from 'react'
+import {lazy, useState, useEffect } from 'react'
 import { MovieContext } from './components/MovieContext'
 
+const WatchListPage = lazy(() => import('./components/Watchlist'));
+const MovieRecommendationPage = lazy(() => import('./components/MovieRecommendation')); 
 
 
 
@@ -54,9 +53,9 @@ useEffect(()=>{
               </>
             }
           />
-          <Route path='/watchlist' element={<Watchlist  />}/> 
+          <Route path='/watchlist' element={<WatchListPage/>}/> 
           
-          <Route path='/recommend' element={<MovieRecommendation/>}/>
+          <Route path='/recommend' element={<MovieRecommendationPage/>}/>
         </Routes>
         </div> 
       
